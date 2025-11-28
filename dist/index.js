@@ -10,7 +10,6 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const user_1 = require("./models/user");
 const app = (0, express_1.default)();
 const PORT = 3000;
-// CodeGrade uses this DB
 const MONGO_URI = "mongodb://127.0.0.1:27017/testdb";
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -20,7 +19,6 @@ mongoose_1.default
     .connect(MONGO_URI)
     .then(() => console.log("MongoDB connected"))
     .catch((err) => console.error(err));
-/** ADD TODO */
 app.post("/add", async (req, res) => {
     const { name, todo } = req.body;
     if (!name || !todo) {
@@ -39,9 +37,8 @@ app.post("/add", async (req, res) => {
             todos: [{ todo, checked: false }]
         });
     }
-    return res.send("Todo added successfully.");
+    return res.send(`Todo added successfully for user ${name}.`);
 });
-/** GET TODOS FOR USER */
 app.get("/todos/:id", async (req, res) => {
     const name = req.params.id;
     const user = await user_1.User.findOne({
@@ -50,9 +47,8 @@ app.get("/todos/:id", async (req, res) => {
     if (!user) {
         return res.status(404).send("User not found");
     }
-    res.json(user);
+    return res.json(user);
 });
-/** DELETE SINGLE TODO */
 app.put("/update", async (req, res) => {
     const { name, todo } = req.body;
     const user = await user_1.User.findOne({
@@ -65,9 +61,8 @@ app.put("/update", async (req, res) => {
         return res.status(404).send("Todo not found");
     user.todos.splice(index, 1);
     await user.save();
-    res.send("Todo deleted successfully.");
+    return res.send("Todo deleted successfully.");
 });
-/** UPDATE CHECKBOX */
 app.put("/updateTodo", async (req, res) => {
     const { name, todo, checked } = req.body;
     const user = await user_1.User.findOne({
@@ -78,11 +73,10 @@ app.put("/updateTodo", async (req, res) => {
     const item = user.todos.find((t) => t.todo === todo);
     if (!item)
         return res.status(404).send("Todo not found");
-    item.checked = checked;
+    item.checked = Boolean(checked);
     await user.save();
-    res.send("Todo updated successfully.");
+    return res.send("Todo updated successfully.");
 });
-/** DELETE USER */
 app.delete("/delete", async (req, res) => {
     const { name } = req.body;
     const deleted = await user_1.User.findOneAndDelete({
@@ -90,6 +84,9 @@ app.delete("/delete", async (req, res) => {
     });
     if (!deleted)
         return res.status(404).send("User not found");
-    res.send("User deleted successfully.");
+    return res.send("User deleted successfully.");
 });
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
+//# sourceMappingURL=index.js.map

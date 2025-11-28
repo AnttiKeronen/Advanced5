@@ -44,3 +44,4 @@ const UserSchema = new mongoose_1.Schema({
     todos: { type: [TodoSchema], default: [] }
 });
 exports.User = mongoose_1.default.model("User", UserSchema);
+//# sourceMappingURL=user.js.map
