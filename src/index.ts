@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import morgan from "morgan";
 import path from "path";
 import mongoose from "mongoose";
-import { User, ITodo, IUser } from "./models/user";
+import { User, ITodo, IUser } from "./models/User";
 const app = express();
 const PORT = 3000;
 const MONGO_URI = "mongodb://127.0.0.1:27017/testdb";
